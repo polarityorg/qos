@@ -26,26 +26,27 @@ endef
 
 ,:=,
 define build
-	$(eval NAME := $(1))
-	$(eval TYPE := $(if $(2),$(2),dir))
-	$(eval PLATFORM := linux/amd64)
-	DOCKER_BUILDKIT=1 \
-	SOURCE_DATE_EPOCH=1 \
-	BUILDKIT_MULTIPLATFORM=1 \
-	docker build \
-		--tag $(REGISTRY)/$(NAME) \
-		--progress=plain \
-		--platform=$(PLATFORM) \
-		$(if $(filter common,$(NAME)),,$(call build_context,$(1))) \
-		$(if $(filter 1,$(NOCACHE)),--no-cache) \
-		--output "\
-			type=oci,\
-			$(if $(filter dir,$(TYPE)),tar=false$(,)) \
-			rewrite-timestamp=true,\
-			force-compression=true,\
-			name=$(NAME),\
-			$(if $(filter tar,$(TYPE)),dest=$@") \
-			$(if $(filter dir,$(TYPE)),dest=out/$(NAME)") \
-		-f src/images/$(NAME)/Containerfile \
-		src/
+    $(eval NAME := $(1))
+    $(eval TYPE := $(if $(2),$(2),dir))
+    $(eval PLATFORM := linux/amd64)
+    DOCKER_BUILDKIT=1 \
+    SOURCE_DATE_EPOCH=1 \
+    BUILDKIT_MULTIPLATFORM=1 \
+    docker build \
+        --tag $(REGISTRY)/$(NAME) \
+        --progress=plain \
+        --platform=$(PLATFORM) \
+        $(if $(filter common,$(NAME)),,$(call build_context,$(1))) \
+        $(if $(filter 1,$(NOCACHE)),--no-cache) \
+        --output "type=docker" \
+        --output "\
+            type=oci,\
+            $(if $(filter dir,$(TYPE)),tar=false$(,)) \
+            rewrite-timestamp=true,\
+            force-compression=true,\
+            name=$(NAME),\
+            $(if $(filter tar,$(TYPE)),dest=$@") \
+            $(if $(filter dir,$(TYPE)),dest=out/$(NAME)") \
+        -f src/images/$(NAME)/Containerfile \
+        src/
 endef
