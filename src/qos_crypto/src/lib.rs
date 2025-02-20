@@ -1,4 +1,4 @@
-//! Cryptographic primitves for use with `QuorumOS`.
+//! Cryptographic primitives for use with `QuorumOS`.
 
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
