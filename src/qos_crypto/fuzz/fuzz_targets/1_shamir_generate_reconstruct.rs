@@ -52,7 +52,7 @@ fuzz_target!(|fuzzerdata: FuzzShamirStruct| {
 			let shares = &all_shares[..(k - 1)];
 
 			// although this function returns a Result<>, it does not automatically detect that is has received
-			// an insufficent number of shares and Err() out - instead, it returns Ok() with an incorrect result
+			// an insufficient number of shares and Err() out - instead, it returns Ok() with an incorrect result
 			let reconstructed_res = shares_reconstruct(shares);
 
 			match reconstructed_res {
